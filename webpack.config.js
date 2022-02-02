@@ -33,12 +33,20 @@ module.exports = {
     ],
     //  Здесь определяется, как будут обрабатываться различные типы модулей
     module : {
+        // В массиве rules описываем лоадеры
         rules: [
+            // Лоадер для фалов css
             {
                 test: /\.css$/,
                 //css-loader позволяет webpack понимать css
                 //style-loader Добавляет стили в head
                 use : ['style-loader','css-loader']
+            },
+            // Лоадер лоя картинок
+            {
+                test : /\.(png|jpg|svg|gif)$/,
+                //! Почему то тут нужно использовать type: 'asset/resource', вместо use : [file-loader]. РАЗОБРАТЬСЯ!
+                type: 'asset/resource',
             }
         ]
     }
