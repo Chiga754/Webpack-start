@@ -20,6 +20,31 @@ module.exports = {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, "dist")
     },
+    resolve : {
+        // Расширения которые будет понимать js (можно в коде явно не указывать '.js', '.json', '.png')
+        extensions : ['.js', '.json', '.png'],
+        // Элиасы нужны для того чтобы кратко указывать необходимый путь
+        alias : {
+            "@models" : path.resolve(__dirname, 'src/models'),
+            "@" : path.resolve(__dirname, 'src'),
+        }
+    },
+    // Настройки для работы webpack-dev-server
+    devServer: {
+        open: true,
+        hot: true,
+        port: 'auto',
+        static: {
+           directory: './src',
+           watch: true
+        }
+     },
+    // Оптимизация (При двойном подключении библиотеки(например jquery) выносися в отдельные файлы)
+    optimization:  {
+        splitChunks: {
+            chunks: "all",
+        },
+    },
     // Плагины
     plugins : [
         new HtmlWebpackPlugin({
@@ -42,11 +67,26 @@ module.exports = {
                 //style-loader Добавляет стили в head
                 use : ['style-loader','css-loader']
             },
-            // Лоадер лоя картинок
+            // Лоадер для картинок
             {
                 test : /\.(png|jpg|svg|gif)$/,
                 //! Почему то тут нужно использовать type: 'asset/resource', вместо use : [file-loader]. РАЗОБРАТЬСЯ!
                 type: 'asset/resource',
+            },
+            // Лоадер для работы с шрифтами
+            {
+                test: /\.(ttf|woff|wof2|eot)$/,
+                type: 'asset/resource',
+            },
+            // Лоадер для работы с XML
+            {
+                test : /\.xml$/,
+                use : ['xml-loader'],
+            },
+            // Лоадер для работы с CSV
+            {
+                test : /\.csv$/,
+                use : ['csv-loader'],
             }
         ]
     }
