@@ -4,6 +4,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // CleanWebpackPlugin используется для очистки папки dist
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+// CopyWebpackPlagin используется для копирования фалов
+const CopyWebpackPlagin = require('copy-webpack-plugin');
 
 module.exports = {
     // С помощью свойства можно context указываем в какой папке лежат исходные файлы.
@@ -55,6 +57,12 @@ module.exports = {
         }),
         // Очистка папки dist
         new CleanWebpackPlugin(),
+        // Настройка копирования
+        new CopyWebpackPlagin({
+            patterns: [
+                {from: path.resolve(__dirname, 'src/favicon.ico'), to: path.resolve(__dirname, 'dist')}
+            ]
+        }),
     ],
     //  Здесь определяется, как будут обрабатываться различные типы модулей
     module : {
