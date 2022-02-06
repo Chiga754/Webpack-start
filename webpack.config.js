@@ -6,6 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 // CopyWebpackPlagin используется для копирования фалов
 const CopyWebpackPlagin = require('copy-webpack-plugin');
+// Извлекает CSS в отдельные файлы
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// Для минимализации CSS
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+// Для минимализации JS
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     // С помощью свойства можно context указываем в какой папке лежат исходные файлы.
@@ -43,16 +49,14 @@ module.exports = {
      },
     // Оптимизация (При двойном подключении библиотеки(например jquery) выносися в отдельные файлы)
     optimization:  {
-        splitChunks: {
-            chunks: "all",
-        },
+        minimizer : [new CssMinimizerPlugin(), new TerserWebpackPlugin()],
     },
     // Плагины
     plugins : [
         new HtmlWebpackPlugin({
             // Взять за основу файл:
             template : './index.html',
-            // ! Без этого поля скрипты подключаются в метатеге. ПОЧИТАТЬ
+            // ! Без этого поля скрипты подключаются в метатеге.
             scriptLoading: "blocking",
         }),
         // Очистка папки dist
@@ -62,6 +66,9 @@ module.exports = {
             patterns: [
                 {from: path.resolve(__dirname, 'src/favicon.ico'), to: path.resolve(__dirname, 'dist')}
             ]
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash].css'
         }),
     ],
     //  Здесь определяется, как будут обрабатываться различные типы модулей
@@ -73,7 +80,10 @@ module.exports = {
                 test: /\.css$/,
                 //css-loader позволяет webpack понимать css
                 //style-loader Добавляет стили в head
-                use : ['style-loader','css-loader']
+                use : [{
+                    loader : MiniCssExtractPlugin.loader,
+                    options : {},
+                },'css-loader']
             },
             // Лоадер для картинок
             {
