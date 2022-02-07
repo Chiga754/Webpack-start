@@ -85,6 +85,30 @@ module.exports = {
                     options : {},
                 },'css-loader']
             },
+            // Лоадер для компиляции Less
+            {
+                test: /\.less$/,
+                //css-loader позволяет webpack понимать css
+                //style-loader Добавляет стили в head
+                use : [{
+                    loader : MiniCssExtractPlugin.loader,
+                    options : {},
+                },
+                'css-loader',
+                'less-loader']
+            },
+            // Лоадер для компиляции Sass
+            {
+                test: /\.s[ac]ss$/,
+                //css-loader позволяет webpack понимать css
+                //style-loader Добавляет стили в head
+                use : [{
+                    loader : MiniCssExtractPlugin.loader,
+                    options : {},
+                },
+                'css-loader',
+                'sass-loader']
+            },
             // Лоадер для картинок
             {
                 test : /\.(png|jpg|svg|gif)$/,

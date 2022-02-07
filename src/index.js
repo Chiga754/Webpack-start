@@ -5,6 +5,9 @@ import './styles/styles.css';
 import WebpackLogo from './assets/webpack-logo';
 import xml from "../src/assets/data.xml";
 import csv from "../src/assets/data.csv";
+import './styles/less.less';
+import './styles/scss.scss';
+
 
 const post = new Post('Webpack post title', WebpackLogo);
 $('pre').addClass('code').html(post.toString());
